@@ -10,6 +10,7 @@
 #import <ImageIO/ImageIO.h>
 
 #import "FLAnimatedImage.h"
+#import "RNFLAnimatedImage.h"
 
 #import "RCTBridgeModule.h"
 #import "RCTImageUtils.h"
@@ -17,17 +18,17 @@
 #import "RCTLog.h"
 
 @implementation RNFLAnimatedImage  {
-
+  
   FLAnimatedImage *_image;
   FLAnimatedImageView *_imageView;
-
+  
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if ((self = [super initWithFrame:frame])) {
     _imageView = [[FLAnimatedImageView alloc] init];
-
+    
     [_imageView addObserver:self forKeyPath:@"currentFrameIndex" options:0 context:nil];
   }
   return self;
@@ -38,7 +39,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 - (void)removeFromSuperview
 {
-
+  
   [_imageView removeObserver:self forKeyPath:@"currentFrameIndex"];
   [super removeFromSuperview];
 }
@@ -81,25 +82,25 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 -(void)reloadImage {
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSData *_imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_src]];
-
+    
     if(_imageData == nil) {
       _imageData = [NSData dataWithContentsOfFile:[NSURL URLWithString:_src]];
     }
-
+    
     if(_imageData == nil) {
       if(_onLoadEnd) {
         _onLoadEnd(@{});
       }
       return;
     }
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *meta = RCTGetImageMetadata(_imageData);
       CGSize size = (CGSize) {
         [meta[(id)kCGImagePropertyPixelWidth] doubleValue],
         [meta[(id)kCGImagePropertyPixelHeight] doubleValue],
       };
-
+      
       if(_onLoadEnd) {
         _onLoadEnd(@{
                      @"size":@{
@@ -108,7 +109,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
                          }
                      });
       }
-
+      
       _image = [FLAnimatedImage animatedImageWithGIFData:_imageData];
       _imageView.contentMode = [_contentMode integerValue];
       _imageView.animatedImage = _image;
