@@ -10,7 +10,6 @@
 #import <ImageIO/ImageIO.h>
 
 #import "FLAnimatedImage.h"
-#import <FLAnimatedImage/FLAnimatedImage.h>
 
 #import "RCTBridgeModule.h"
 #import "RCTImageUtils.h"

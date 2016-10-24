@@ -7,7 +7,7 @@
 //
 
 #import "RCTView.h"
-#import <FLAnimatedImage/FLAnimatedImage.h>
+#import "FLAnimatedImage.h"
 
 @class RNFLAnimatedImage;
 
